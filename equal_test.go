@@ -27,6 +27,15 @@ func (n implementsEqual) Equal(other implementsEqual) bool {
 }
 
 func TestEqual(t *testing.T) {
+	t.Run("calls Helper", func(t *testing.T) {
+		tb := &mockTB{}
+		posit.Equal(tb, "foo", "bar")
+
+		if !tb.helper {
+			t.Error("should have called Helper() but did not")
+		}
+	})
+
 	t.Run("equal", func(t *testing.T) {
 		now := time.Now()
 		ptr := "foo"
@@ -188,6 +197,15 @@ func TestEqual(t *testing.T) {
 }
 
 func TestEqualAny(t *testing.T) {
+	t.Run("calls Helper", func(t *testing.T) {
+		tb := &mockTB{}
+		posit.EqualAny(tb, "foo")
+
+		if !tb.helper {
+			t.Error("should have called Helper() but did not")
+		}
+	})
+
 	t.Run("no wants", func(t *testing.T) {
 		tb := &mockTB{}
 		posit.EqualAny(tb, "foo")
