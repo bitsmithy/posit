@@ -1,5 +1,5 @@
 ---
-name: Lint and Test
+name: Check
 on:
   push:
     branches: [main]
@@ -9,26 +9,19 @@ on:
     branches: [main]
   workflow_dispatch:
 jobs:
-  test:
+  lint:
     runs-on: blacksmith-2vcpu-ubuntu-2404-arm
-    strategy:
-      matrix:
-        go-version: ["1.24"]
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
+      - uses: ./.github/actions/setup
       - name: Install linter
         uses: golangci/golangci-lint-action@v8
-      - name: Install dependencies
-        run: go get .
-      - name: Build
-        run: go build -v ./...
       - name: Lint
         run: golangci-lint run ./...
+  vet:
+    runs-on: blacksmith-2vcpu-ubuntu-2404-arm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - name: Vet
         run: go vet ./...
-      - name: Test
-        run: go test ./...
