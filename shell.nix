@@ -4,6 +4,7 @@
 
 pkgs.mkShell {
   packages = with pkgs; [
+    act
     go
     golangci-lint
     gotestsum
